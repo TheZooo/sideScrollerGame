@@ -36,8 +36,8 @@
       var barY = [];
       var barW = [];
       var barH = [];
-      var collision = false;
       var hit = false;
+      var collision = false;
       var barInt = setInterval(addBar, 800);
       var jumper = new jumper();
       var barrier = new barrier();
@@ -55,7 +55,22 @@
         barrier.show();
         barrier.update();
         safePlatform.show();
-        safePlatform.update();
+        collision = collideRectCircle(safePlatform.x,safePlatform.y,safePlatSize,safePlatSize,jumper.x,jumper.y,jumperSize);
+        if (collision === true) {
+          if (safePlatform.x > jumper.x + jumperSize) {
+            jumper.x = safePlatform.x;
+          }
+          if (safePlatform.x + safePlatSize < jumper.x) {
+            jumper.y = safePlatform.x + safePlatSize;
+          }
+          if (safePlatform.y < jumper.y) {
+            jumper.y = safePlatform.y + safePlatSize + jumper.gravity;
+          }
+          if (safePlatform.y + safePlatSize > jumper.y) {
+            jumper.y = safePlatform.y - jumper.gravity;
+            jumper.velocity = 0;
+          }
+        }
         for (var i = 0; i < barX.length; i++) {
           hit = collideRectCircle(barX[i],barY[i],barW[i],barH[i],jumper.x,jumper.y,jumperSize);
           if (hit === true) {
