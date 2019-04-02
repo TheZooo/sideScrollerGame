@@ -38,8 +38,8 @@
       var w = window.innerWidth;
       var h = window.innerHeight;
       var jumperSize = 20;
-      var safePlatSizeX = 90;
-      var safePlatSizeY = 30
+      var safePlatSizeX = 300;
+      var safePlatSizeY = 20;
       var barX = [];
       var barY = [];
       var barW = [];
@@ -71,19 +71,19 @@
           if (safePlatform.x > jumper.x + jumperSize) {
             jumper.x = safePlatform.x;
           }
-          if (safePlatform.x + safePlatSizeX < jumper.x) {
-            jumper.y = safePlatform.x + safePlatSize;
+          if (safePlatform.x + safePlatSizeX < jumper.x - jumperSize) {
+            jumper.x = safePlatform.x + safePlatSizeX;
           }
           if (safePlatform.y < jumper.y) {
-            jumper.y = safePlatform.y + safePlatSizeY + jumper.gravity;
+            jumper.y = safePlatform.y + safePlatSizeY + jumper.gravity + 2;
           }
           if (safePlatform.y + safePlatSizeY > jumper.y) {
-            jumper.y = safePlatform.y - jumper.gravity;
+            jumper.y = safePlatform.y - jumper.gravity - 2;
             jumper.velocity = 0;
           }
         }
         for (var i = 0; i < barX.length; i++) {
-          hit = collideRectCircle(barX[i],barY[i],barW[i],barH[i],jumper.x,jumper.y,jumperSize);
+          hit = collideRectCircle(barX[i],barY[i],barW[i] - 10,barH[i] - 10,jumper.x,jumper.y,jumperSize - 10);
           if (hit === true) {
             document.getElementById('bttn').style.visibility = "visible";
             document.getElementById('end').style.visibility = "visible";
@@ -107,8 +107,10 @@
       }
       
       function addPoint() {
+        if (collision === true) {
           points++;
           document.getElementById('points').innerHTML = points;
+        }
       }
       
       function keyPressed() {
