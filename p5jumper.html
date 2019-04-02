@@ -22,22 +22,32 @@
       #bttn {
         visibility: hidden;
       }
+      #points {
+        position: absolute;
+        left: 50vw;
+        top: 20px;
+        color: white;
+      }
     </style>
   </head>
   <body>
     <h1 id="end">You got hit</h1>
     <button id="bttn" onclick="reset()">RESET</button>
+    <h1 id="points"></h1>
     <script>
       var w = window.innerWidth;
       var h = window.innerHeight;
       var jumperSize = 20;
-      var safePlatSize = 50;
+      var safePlatSizeX = 90;
+      var safePlatSizeY = 30
       var barX = [];
       var barY = [];
       var barW = [];
       var barH = [];
       var hit = false;
       var collision = false;
+      var points = 0;
+      var pointInt = setInterval(addPoint, 1000);
       var barInt = setInterval(addBar, 800);
       var jumper = new jumper();
       var barrier = new barrier();
@@ -45,6 +55,7 @@
       
       function setup() {
         createCanvas(w, h);
+        document.getElementById('points').innerHTML = points;
       }
       
       function draw() {
@@ -55,18 +66,18 @@
         barrier.show();
         barrier.update();
         safePlatform.show();
-        collision = collideRectCircle(safePlatform.x,safePlatform.y,safePlatSize,safePlatSize,jumper.x,jumper.y,jumperSize);
+        collision = collideRectCircle(safePlatform.x,safePlatform.y,safePlatSizeX,safePlatSizeY,jumper.x,jumper.y,jumperSize);
         if (collision === true) {
           if (safePlatform.x > jumper.x + jumperSize) {
             jumper.x = safePlatform.x;
           }
-          if (safePlatform.x + safePlatSize < jumper.x) {
+          if (safePlatform.x + safePlatSizeX < jumper.x) {
             jumper.y = safePlatform.x + safePlatSize;
           }
           if (safePlatform.y < jumper.y) {
-            jumper.y = safePlatform.y + safePlatSize + jumper.gravity;
+            jumper.y = safePlatform.y + safePlatSizeY + jumper.gravity;
           }
-          if (safePlatform.y + safePlatSize > jumper.y) {
+          if (safePlatform.y + safePlatSizeY > jumper.y) {
             jumper.y = safePlatform.y - jumper.gravity;
             jumper.velocity = 0;
           }
@@ -76,6 +87,7 @@
           if (hit === true) {
             document.getElementById('bttn').style.visibility = "visible";
             document.getElementById('end').style.visibility = "visible";
+            stopInt();
             noLoop();
           }
         }
@@ -85,8 +97,18 @@
         location.href = "p5jumper.html";
       }
       
+      function stopInt() {
+        clearInterval(barInt);
+        clearInterval(pointInt);
+      }
+      
       function addBar() {
-        barrier.addB();
+          barrier.addB();
+      }
+      
+      function addPoint() {
+          points++;
+          document.getElementById('points').innerHTML = points;
       }
       
       function keyPressed() {
