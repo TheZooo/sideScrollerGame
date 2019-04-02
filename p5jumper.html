@@ -3,6 +3,7 @@
     <script src="p5/p5.min.js"></script>
     <script src="p5jumperScript.js"></script>
     <script src="p5barrierScript.js"></script>
+    <script src="p5safePlatScript.js"></script>
     <script src="p5/p5.collide2D.min.js"></script>
     <style>
       body {
@@ -30,14 +31,17 @@
       var w = window.innerWidth;
       var h = window.innerHeight;
       var jumperSize = 20;
+      var safePlatSize = 50;
       var barX = [];
       var barY = [];
       var barW = [];
       var barH = [];
+      var collision = false;
       var hit = false;
       var barInt = setInterval(addBar, 800);
       var jumper = new jumper();
       var barrier = new barrier();
+      var safePlatform = new safePlatform();
       
       function setup() {
         createCanvas(w, h);
@@ -50,6 +54,8 @@
         jumper.update();
         barrier.show();
         barrier.update();
+        safePlatform.show();
+        safePlatform.update();
         for (var i = 0; i < barX.length; i++) {
           hit = collideRectCircle(barX[i],barY[i],barW[i],barH[i],jumper.x,jumper.y,jumperSize);
           if (hit === true) {
