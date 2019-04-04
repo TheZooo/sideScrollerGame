@@ -16,6 +16,7 @@
         z-index: -1;
       }
       #end {
+        user-select: none;
         color: white;
         visibility: hidden;
       }
@@ -23,17 +24,27 @@
         visibility: hidden;
       }
       #points {
+        user-select: none;
         position: absolute;
         left: 50vw;
         top: 20px;
         color: white;
       }
       #hint {
+        user-select: none;
         font-size: 20px;
         position: absolute;
         left: 43vw;
         top: 328px;
         color: white;
+      }
+      #faster {
+        user-select: none;
+        position: absolute;
+        color: white;
+        left: 20px;
+        top: 20px;
+        visibility: hidden;
       }
     </style>
   </head>
@@ -42,6 +53,7 @@
     <button id="bttn" onclick="reset()">RESET</button>
     <h1 id="points"></h1>
     <h1 id="hint">Stay on the Platform</h1>
+    <h1 id="faster">FASTER!!</h1>
     <script>
       var w = window.innerWidth;
       var h = window.innerHeight;
@@ -55,6 +67,10 @@
       var hit = false;
       var collision = false;
       var points = 0;
+      var pointGoal = 8;
+      var pointGoalInc = 8;
+      var fastDisplayTimeReset = 100;
+      var fastDisplayTime = 0;
       var pointInt = setInterval(addPoint, 1000);
       var barInt = setInterval(addBar, 800);
       var jumper = new jumper();
@@ -67,7 +83,7 @@
       }
       
       function draw() {
-        background(0);
+        background(0,0,0,90);
         jumper.show();
         jumper.hori();
         jumper.update();
@@ -89,6 +105,18 @@
             jumper.y = safePlatform.y - jumper.gravity - 2;
             jumper.velocity = 0;
           }
+        }
+        if (points >= pointGoal) {
+          barrier.travel += 2;
+          pointGoal += pointGoalInc;
+          fastDisplayTime = fastDisplayTimeReset;
+        }
+        if (fastDisplayTime > 0) {
+          document.getElementById('faster').style.visibility = "visible";
+          fastDisplayTime--;
+        }
+        else if (fastDisplayTime === 0) {
+          document.getElementById('faster').style.visibility = "hidden";
         }
         for (var i = 0; i < barX.length; i++) {
           hit = collideRectCircle(barX[i],barY[i],barW[i] - 10,barH[i] - 10,jumper.x,jumper.y,jumperSize - 10);
