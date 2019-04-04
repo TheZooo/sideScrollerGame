@@ -28,7 +28,7 @@ function barrier() {
           bx = w + 10;
           by = Math.floor(Math.random() * h);
           bw= Math.floor(Math.random() * 50) + 20;
-          bh = Math.floor(Math.random() * 500) + 50;
+          bh = Math.floor(Math.random() * 400) + 50;
           barX.push(bx);
           barY.push(by);
           barW.push(bw);
